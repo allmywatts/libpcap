@@ -20,12 +20,18 @@ else:
     else:
         arch = "x86" if is_py32bit else "x64"
         DLL_PATH = os.path.join(this_dir, arch + "_" + LIBPCAP, "libpcap-1.0.so")
+    # TODO: DLL_PATH should resolve to system so?
+    # Error: AttributeError: /usr/lib64/libpcap.so.1: undefined symbol: pcap_open
+    DLL_PATH = "/usr/lib64/libpcap.so.1"
 
 from ctypes  import CDLL      as DLL
 from ctypes  import CFUNCTYPE as CFUNC
 from _ctypes import dlclose
 
 DLL = partial(DLL, mode=ct.RTLD_GLOBAL)
+
+time_t = ct.c_long
+suseconds_t = ct.c_long
 
 # Taken from the file sys/time.h.
 #include <time.h>
@@ -49,3 +55,12 @@ class sockaddr(ct.Structure):
     ("ipv6_addr", ct.c_byte * 16),
     ("__pad2",    ct.c_ulong),
 ]
+
+class sockaddr_in(ct.Structure):
+    # TODO
+    pass
+
+class sockaddr_in6(ct.Structure):
+    # TODO
+    pass
+    
